@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Redirect, Route } from 'react-router-dom';
+import './App.scss';
+import * as AuthContext from './providers/AuthProvider';
+
+// import * as UserContext from './providers/UserProvider';
+import WaitingRoom from './pages/WaitingRoom/WaitingRoom';
+import ShareCode from './pages/ShareCode/ShareCode';
+import Login from './pages/Login/Login';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <AuthContext.Provider>
+        <AuthContext.Consumer>
+          {(authcontext) => (
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={(props) => <WaitingRoom {...props} {...authcontext} />}
+              />
+              <Route
+                exact
+                path='/sharecode'
+                render={(props) => <ShareCode {...props} {...authcontext} />}
+              />
+              <Route
+                exact
+                path='/login'
+                render={(props) => <Login {...props} {...authcontext} />}
+              />
+              <Redirect to='/' />
+            </Switch>
+          )}
+        </AuthContext.Consumer>
+      </AuthContext.Provider>
+    </>
   );
 }
 
