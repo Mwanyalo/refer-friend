@@ -1,6 +1,5 @@
 import React, { Component, createContext } from 'react';
 import api from '../adapters/config';
-import history from '../adapters/history';
 export const AuthContext = createContext({ user: null });
 
 class AuthProvider extends Component {
@@ -16,22 +15,21 @@ class AuthProvider extends Component {
   isAuthenticated = () => {
     const uid = localStorage.uid;
     if (uid) {
-      this.setState({ uid: uid }, () => {
-        return true;
-      });
+      this.setState({ uid: uid });
+      return true;
     }
+    this.setState({ uid: '' });
     return false;
   };
 
   login = (props) => {
-    return api
+    api
       .post('login', props)
       .then((res) => {
         if (res.status === 200) {
           const uid = 'id' + new Date().getTime();
+          this.setState({ uid: uid });
           localStorage.setItem('uid', uid);
-          // this.props.history.push('/sharecode');
-          return res;
         } else {
           this.setState({ error: 'Login failed' });
         }
@@ -41,18 +39,12 @@ class AuthProvider extends Component {
       });
   };
 
-  logout = () => {
-    localStorage.clear('uid');
-    history.push('/login');
-  };
-
   render() {
     return (
       <AuthContext.Provider
         value={{
           ...this.state,
           login: this.login,
-          logout: this.logout,
           isAuthenticated: this.isAuthenticated,
         }}
       >

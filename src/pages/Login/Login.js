@@ -30,13 +30,9 @@ class Login extends Component {
       password: this.state.password,
       username: this.state.username,
     };
-    this.props.history.push('/sharecode');
 
-    this.props.login(model).then((data) => {
-      console.log(data);
-      console.log(this.props);
-      this.props.navigation.navigate('/sharecode');
-    });
+    this.props.login(model);
+    this.props.history.push('/');
     if (this.props.error) {
       this.setState({ error: 'Your password or email is Incorect' });
     }

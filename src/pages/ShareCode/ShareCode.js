@@ -30,7 +30,7 @@ class ShareCode extends Component {
                 <input
                   className='shareUrl-input'
                   type='text'
-                  readonly='readonly'
+                  readOnly='readonly'
                   value={this.state.referralLink}
                   onFocus={this.handleFocus}
                 />
